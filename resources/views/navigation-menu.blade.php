@@ -15,8 +15,11 @@
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('imageCrop') }}" :active="request()->routeIs('imageCrop')">
+                    <x-jet-nav-link href="{{ route('banner') }}" :active="request()->routeIs('banner')">
                         {{ __('Banner') }}
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('blog') }}" :active="request()->routeIs('blog')">
+                        {{ __('Blog') }}
                     </x-jet-nav-link>
                 </div>
             </div>
@@ -143,6 +146,12 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('banner') }}" :active="request()->routeIs('banner')">
+                {{ __('Banner') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('blog') }}" :active="request()->routeIs('blog')">
+                {{ __('Blog') }}
             </x-jet-responsive-nav-link>
         </div>
 

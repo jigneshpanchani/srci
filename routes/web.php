@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BannerController;
-
+use App\Http\Livewire\Blogs;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +19,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('image-crop', [BannerController::class, "imageCrop"]);
-Route::post('image-crop', [BannerController::class, "imageCropPost"])->name("imageCrop");
+Route::get('category',function(){
+    return view('category');
+});
+
+Route::get('blog', Blogs::class)->name('blog');
+Route::view('laravel-livewire-upload-multiple-image','livewire.home');
+
+Route::get('banner', [BannerController::class, "index"]);
+Route::post('banner', [BannerController::class, "imageCropPost"])->name("banner");
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

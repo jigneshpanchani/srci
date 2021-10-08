@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Banner;
 use Illuminate\Http\Request;
 
 class BannerController extends Controller
@@ -11,7 +12,7 @@ class BannerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function imageCrop()
+    public function index()
     {
         return view('banner/image-crop');
     }
@@ -23,17 +24,50 @@ class BannerController extends Controller
      */
     public function imageCropPost(Request $request)
     {
-        $data = $request->image;
+        $request->validate([
+            'bannerFile' => 'required',
+            'bannerFile.*' => 'mimes:jpeg,jpg,png,gif,csv,txt,pdf|max:2048'
+        ]);
 
-        list($type, $data) = explode(';', $data);
-        list(, $data) = explode(',', $data);
+        if(!empty($request->bannerFile)) {
+            $data = $request->bannerFile;
 
-        $data = base64_decode($data);
-        $image_name = time() . '.png';
-        $path = public_path() . "/images/" . $image_name;
+            list($type, $data) = explode(';', $data);
+            list(, $data) = explode(',', $data);
 
-        file_put_contents($path, $data);
+            $data = base64_decode($data);
+            $image_name = time() . '.png';
+            $path = public_path('storage/banner/'.$image_name);
+            file_put_contents($path, $data);
 
-        return response()->json(['status' => 1, 'message' => "Image uploaded successfully"]);
+            $bannerModal = new Banner();
+            $bannerModal->name = json_encode($image_name);
+            $bannerModal->image_path = json_encode($path);
+            $bannerModal->save();
+
+            //return back()->with('success', 'Banner has successfully uploaded!');
+            return response()->json(['status' => 1, 'message' => "Image uploaded successfully"]);
+        }
+    }
+
+    public function fileUpload(Request $req){
+        $req->validate([
+            'imageFile' => 'required',
+            'imageFile.*' => 'mimes:jpeg,jpg,png,gif,csv,txt,pdf|max:2048'
+        ]);
+
+        if($req->hasfile('imageFile')) {
+            $file = $req->file('imageFile');
+            $name = $file->getClientOriginalName();
+            $file->move(public_path().'/storage/banner/', $name);
+            $imgData = $name;
+
+            $fileModal = new Banner();
+            $fileModal->name = json_encode($imgData);
+            $fileModal->image_path = json_encode($imgData);
+            $fileModal->save();
+
+            return back()->with('success', 'Banner has successfully uploaded!');
+        }
     }
 }

@@ -5,15 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <x-jet-welcome />
-            </div>
-        </div>
-    </div>
 </x-app-layout>
-
 
 <html lang="en">
 
@@ -28,6 +20,21 @@
 <div class="container" style="margin-top:30px;">
     <div class="panel panel-primary">
         <div class="panel-heading">Crop Image Before Upload Using Croppie.js in Laravel 8</div>
+        @if ($message = Session::get('success'))
+            <div class="alert alert-success">
+                <strong>{{ $message }}</strong>
+            </div>
+        @endif
+
+        @if (count($errors) > 0)
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-4 text-center">
@@ -35,7 +42,7 @@
                 </div>
                 <div class="col-md-4" style="padding-top:30px;">
                     <strong>Select Image:</strong>
-                    <input type="file" id="upload">
+                    <input type="file" id="upload" name="bannerFile">
                     <br />
                     <button class="btn btn-success upload-result">Upload Image</button>
                 </div>
@@ -90,10 +97,10 @@
             size: 'viewport'
         }).then(function(resp) {
             $.ajax({
-                url: "{{ route('imageCrop') }}",
+                url: "{{ route('banner') }}",
                 type: "POST",
                 data: {
-                    "image": resp
+                    "bannerFile": resp
                 },
                 success: function(data) {
                     html = '<img src="' + resp + '" />';
